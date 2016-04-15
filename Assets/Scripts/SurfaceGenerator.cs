@@ -3,22 +3,17 @@
 [RequireComponent(typeof(MeshFilter), typeof(MeshRenderer))]
 public class SurfaceGenerator : MonoBehaviour {
 
-    [Range(1, 200)]
-    public int resolution = 10;
+    [Range(1, 200)] public int resolution = 10;
 
     // Noise variables.
     public float frequency = 1f;
-    [Range(1, 8)]
-    public int octaves = 1;
-    [Range(1f, 4f)]
-    public float lacunarity = 2f;
-    [Range(0f, 1f)]
-    public float persistence = 0.5f;
-    [Range(1, 3)]
-    public int dimensions = 3;
+    [Range(1, 8)]   public int octaves = 1;
+    [Range(1f, 4f)] public float lacunarity = 2f;
+    [Range(0f, 1f)] public float persistence = 0.5f;
+    [Range(1, 3)]   public int dimensions = 3;
+    [Range(0f, 1f)] public float scaleFactor = 1f;
     public NoiseMethodType type;
     public Gradient coloring;
-
     public Vector3 noiseOffset;
     public Vector3 rotation;
 
@@ -54,12 +49,14 @@ public class SurfaceGenerator : MonoBehaviour {
                 Vector3 point = Vector3.Lerp(point0, point1, x * quadSize);
                 float sample = Noise.Sum(method, point, frequency, octaves, lacunarity, persistence);
                 sample = type == NoiseMethodType.Value ? (sample - 0.5f) : (sample * 0.5f);
+                sample *= scaleFactor;
                 vertices[i].y = sample;
                 colours[i] = coloring.Evaluate(sample + 0.5f);
             }
         }
         mesh.vertices = vertices;
         mesh.colors = colours;
+        mesh.RecalculateNormals();
     }
 
     // Creates a mesh grid where the size is dependent on the resolution.
