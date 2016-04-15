@@ -12,6 +12,8 @@ public class SurfaceGenerator : MonoBehaviour {
     [Range(0f, 1f)] public float persistence = 0.5f;
     [Range(1, 3)]   public int dimensions = 3;
     [Range(0f, 1f)] public float scaleFactor = 1f;
+    public bool damping;
+    public bool scaleWithColour;
     public NoiseMethodType type;
     public Gradient coloring;
     public Vector3 noiseOffset;
@@ -41,6 +43,13 @@ public class SurfaceGenerator : MonoBehaviour {
         NoiseMethod method = Noise.methods[(int)type][dimensions - 1];
         float quadSize = 1f / currentResolution;
 
+        float amplitude;
+        if (damping) {
+            amplitude = scaleFactor / frequency;
+        } else {
+            amplitude = scaleFactor;
+        }
+
         for (int i = 0, y = 0; y <= resolution; y++) {
             Vector3 point0 = Vector3.Lerp(point00, point01, y * quadSize);
             Vector3 point1 = Vector3.Lerp(point10, point11, y * quadSize);
@@ -49,9 +58,14 @@ public class SurfaceGenerator : MonoBehaviour {
                 Vector3 point = Vector3.Lerp(point0, point1, x * quadSize);
                 float sample = Noise.Sum(method, point, frequency, octaves, lacunarity, persistence);
                 sample = type == NoiseMethodType.Value ? (sample - 0.5f) : (sample * 0.5f);
-                sample *= scaleFactor;
+                if (scaleWithColour) {
+                    colours[i] = coloring.Evaluate(sample + 0.5f);
+                    sample *= amplitude;
+                } else {
+                    sample *= amplitude;
+                    colours[i] = coloring.Evaluate(sample + 0.5f);
+                }
                 vertices[i].y = sample;
-                colours[i] = coloring.Evaluate(sample + 0.5f);
             }
         }
         mesh.vertices = vertices;
