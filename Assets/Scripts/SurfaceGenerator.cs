@@ -12,12 +12,14 @@ public class SurfaceGenerator : MonoBehaviour {
     [Range(0f, 1f)] public float persistence = 0.5f;
     [Range(1, 3)]   public int dimensions = 3;
     [Range(0f, 1f)] public float scaleFactor = 1f;
-    public bool damping;
-    public bool scaleWithColour;
     public NoiseMethodType type;
     public Gradient coloring;
     public Vector3 noiseOffset;
     public Vector3 rotation;
+    public bool damping;
+    public bool scaleWithColour;
+    public bool displayNormals;
+    public bool wireframe;
 
     private Mesh mesh;
     private int currentResolution;
@@ -71,6 +73,7 @@ public class SurfaceGenerator : MonoBehaviour {
         mesh.vertices = vertices;
         mesh.colors = colours;
         mesh.RecalculateNormals();
+        normals = mesh.normals;
     }
 
     // Creates a mesh grid where the size is dependent on the resolution.
@@ -126,4 +129,14 @@ public class SurfaceGenerator : MonoBehaviour {
         Refresh();
     }
 
+    // Draws the normals of the mesh when it is selected.
+    private void OnDrawGizmosSelected() {
+        float scale = 1f / resolution;
+        Gizmos.color = Color.cyan;
+        if (displayNormals && vertices != null) {
+            for (int i = 0; i < vertices.Length; i++) {
+                Gizmos.DrawRay(vertices[i], scale * normals[i]);
+            }
+        }
+    }
 }
