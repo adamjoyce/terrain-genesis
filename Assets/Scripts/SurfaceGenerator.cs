@@ -19,6 +19,9 @@ public class SurfaceGenerator : MonoBehaviour {
     public NoiseMethodType type;
     public Gradient coloring;
 
+    public Vector3 noiseOffset;
+    public Vector3 rotation;
+
     private Mesh mesh;
     private int currentResolution;
 
@@ -31,18 +34,22 @@ public class SurfaceGenerator : MonoBehaviour {
         if (currentResolution != resolution)
             CreateMeshGrid();
 
-        // Quad corners.
-        Vector3 point00 = transform.TransformPoint(new Vector3(-0.5f, -0.5f));
-        Vector3 point10 = transform.TransformPoint(new Vector3(0.5f, -0.5f));
-        Vector3 point01 = transform.TransformPoint(new Vector3(-0.5f, 0.5f));
-        Vector3 point11 = transform.TransformPoint(new Vector3(0.5f, 0.5f));
+        Quaternion rotate = Quaternion.Euler(rotation);
 
+        // Quad corners. MORE COMPREHENSIVE.
+        Vector3 point00 = rotate * transform.TransformPoint(new Vector3(-0.5f, -0.5f)) + noiseOffset;
+        Vector3 point10 = rotate * transform.TransformPoint(new Vector3(0.5f, -0.5f)) + noiseOffset;
+        Vector3 point01 = rotate * transform.TransformPoint(new Vector3(-0.5f, 0.5f)) + noiseOffset;
+        Vector3 point11 = rotate * transform.TransformPoint(new Vector3(0.5f, 0.5f)) + noiseOffset;
+
+        // Determine the dimension for the noise method.
         NoiseMethod method = Noise.methods[(int)type][dimensions - 1];
         float quadSize = 1f / currentResolution;
 
         for (int i = 0, y = 0; y <= resolution; y++) {
             Vector3 point0 = Vector3.Lerp(point00, point01, y * quadSize);
             Vector3 point1 = Vector3.Lerp(point10, point11, y * quadSize);
+
             for (int x = 0; x <= resolution; x++, i++) {
                 Vector3 point = Vector3.Lerp(point0, point1, x * quadSize);
                 float sample = Noise.Sum(method, point, frequency, octaves, lacunarity, persistence);
