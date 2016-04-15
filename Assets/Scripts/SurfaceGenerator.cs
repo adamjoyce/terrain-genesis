@@ -18,22 +18,40 @@ public class SurfaceGenerator : MonoBehaviour {
     // Creates a mesh grid where the size is dependent on the resolution.
     private void CreateMeshGrid() {
         currentResolution = resolution;
+        mesh.Clear();
+
         int gridLength = currentResolution + 1;
-        Vector3[] vertices = new Vector3[gridLength * gridLength];
         float quadSize = 1f / currentResolution;
 
-        // Build the mesh grid array.
-        for (int i = 0, column = 0; column <= currentResolution; column++) {
-            for (int row = 0; row <= currentResolution; row++, i++) {
-                vertices[i] = new Vector3(row * quadSize - 0.5f, column * quadSize - 0.5f);
+        Vector3[] vertices = new Vector3[gridLength * gridLength];
+        Vector2[] uvs = new Vector2[vertices.Length];
+        Vector3[] normals = new Vector3[vertices.Length];
+
+        // Build the mesh grid vertex array.
+        for (int i = 0, y = 0; y <= currentResolution; y++) {
+            for (int x = 0; x <= currentResolution; x++, i++) {
+                vertices[i] = new Vector3(x * quadSize - 0.5f, y * quadSize - 0.5f);
+                uvs[i] = new Vector3(x * quadSize, y * quadSize);
+                normals[i] = new Vector3(0, 0, -1);
             }
         }
-
         mesh.vertices = vertices;
-        mesh.triangles = new int[] {
-            0, 2, 1,
-            1, 2, 3
-        };
+        mesh.uv = uvs;
+        mesh.normals = normals;
+
+        // Build the mesh grid triangle array.
+        int[] triangles = new int[currentResolution * currentResolution * 6];
+        for (int ti = 0, vi = 0, y = 0; y < currentResolution; vi++, y++) {
+            for (int x = 0; x < currentResolution; x++, ti += 6, vi++) {
+                triangles[ti] = vi;
+                triangles[ti + 1] = vi + currentResolution + 1;
+                triangles[ti + 2] = vi + 1;
+                triangles[ti + 3] = vi + 1;
+                triangles[ti + 4] = vi + currentResolution + 1;
+                triangles[ti + 5] = vi + currentResolution + 2;
+            }
+        }
+        mesh.triangles = triangles;
     }
 
     // Creates a mesh if one does not exist.
@@ -43,7 +61,6 @@ public class SurfaceGenerator : MonoBehaviour {
             mesh.name = "Surface Mesh";
             GetComponent<MeshFilter>().mesh = mesh;
         }
-
         Refresh();
     }
 
