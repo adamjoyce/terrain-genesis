@@ -69,7 +69,7 @@ public class SurfaceGenerator : MonoBehaviour {
 
         int gridLength = currentResolution + 1;
         float quadSize = 1f / currentResolution;
-
+        
         vertices = new Vector3[gridLength * gridLength];
         normals = new Vector3[vertices.Length];
         colours = new Color[vertices.Length];
