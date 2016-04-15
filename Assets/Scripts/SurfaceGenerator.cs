@@ -53,13 +53,12 @@ public class SurfaceGenerator : MonoBehaviour {
             for (int x = 0; x <= resolution; x++, i++) {
                 Vector3 point = Vector3.Lerp(point0, point1, x * quadSize);
                 float sample = Noise.Sum(method, point, frequency, octaves, lacunarity, persistence);
-
-                if (type != NoiseMethodType.Value) {
-                    sample = sample * 0.5f + 0.5f;
-                }
-                colours[i] = coloring.Evaluate(sample);
+                sample = type == NoiseMethodType.Value ? (sample - 0.5f) : (sample * 0.5f);
+                vertices[i].y = sample;
+                colours[i] = coloring.Evaluate(sample + 0.5f);
             }
         }
+        mesh.vertices = vertices;
         mesh.colors = colours;
     }
 
@@ -78,11 +77,11 @@ public class SurfaceGenerator : MonoBehaviour {
         Vector2[] uvs = new Vector2[vertices.Length];
 
         // Build the mesh grid vertex array.
-        for (int i = 0, y = 0; y <= currentResolution; y++) {
+        for (int i = 0, z = 0; z <= currentResolution; z++) {
             for (int x = 0; x <= currentResolution; x++, i++) {
-                vertices[i] = new Vector3(x * quadSize - 0.5f, y * quadSize - 0.5f);
-                uvs[i] = new Vector3(x * quadSize, y * quadSize);
-                normals[i] = new Vector3(0, 0, -1);
+                vertices[i] = new Vector3(x * quadSize - 0.5f, 0f, z * quadSize - 0.5f);
+                uvs[i] = new Vector3(x * quadSize, z * quadSize);
+                normals[i] = new Vector3(0, 1, 0);
                 colours[i] = new Color(0, 0, 0, 1);
             }
         }
