@@ -312,7 +312,7 @@ public static class Noise {
         float sum = method(point, frequency);
         float amplitude = 1f;
         float range = 1f;
-        for (int o = 1; o < octaves; o++) {
+        for (int i = 1; i < octaves; i++) {
             frequency *= lacunarity;
             amplitude *= persistence;
             range += amplitude;

@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-[RequireComponent(typeof(MeshFilter), typeof(MeshRenderer))]
+[RequireComponent(typeof(MeshFilter), typeof(MeshRenderer), typeof(MeshCollider))]
 public class SurfaceGenerator : MonoBehaviour {
 
     [Range(1, 200)] public int resolution = 10;
@@ -22,6 +22,7 @@ public class SurfaceGenerator : MonoBehaviour {
     public bool wireframe;
 
     private Mesh mesh;
+    private MeshCollider meshCollider;
     private int currentResolution;
 
     private Vector3[] vertices;
@@ -58,22 +59,23 @@ public class SurfaceGenerator : MonoBehaviour {
 
             for (int x = 0; x <= resolution; x++, i++) {
                 Vector3 point = Vector3.Lerp(point0, point1, x * quadSize);
-                float sample = Noise.Sum(method, point, frequency, octaves, lacunarity, persistence);
-                sample = type == NoiseMethodType.Value ? (sample - 0.5f) : (sample * 0.5f);
+                float noiseSample = Noise.Sum(method, point, frequency, octaves, lacunarity, persistence);
+                noiseSample = type == NoiseMethodType.Value ? (noiseSample - 0.5f) : (noiseSample * 0.5f);
                 if (scaleWithColour) {
-                    colours[i] = coloring.Evaluate(sample + 0.5f);
-                    sample *= amplitude;
+                    colours[i] = coloring.Evaluate(noiseSample + 0.5f);
+                    noiseSample *= amplitude;
                 } else {
-                    sample *= amplitude;
-                    colours[i] = coloring.Evaluate(sample + 0.5f);
+                    noiseSample *= amplitude;
+                    colours[i] = coloring.Evaluate(noiseSample + 0.5f);
                 }
-                vertices[i].y = sample;
+                vertices[i].y = noiseSample;
             }
         }
         mesh.vertices = vertices;
         mesh.colors = colours;
         mesh.RecalculateNormals();
         normals = mesh.normals;
+        meshCollider.sharedMesh = mesh;
     }
 
     // Creates a mesh grid where the size is dependent on the resolution.
@@ -126,6 +128,7 @@ public class SurfaceGenerator : MonoBehaviour {
             mesh.name = "Surface Mesh";
             GetComponent<MeshFilter>().mesh = mesh;
         }
+        meshCollider = GetComponent<MeshCollider>();
         Refresh();
     }
 
