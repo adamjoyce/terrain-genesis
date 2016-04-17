@@ -17,6 +17,9 @@ public class GUIControls : MonoBehaviour {
     public InputField xOffset;
     public InputField yOffset;
     public InputField zOffset;
+    public InputField xRotation;
+    public InputField yRotation;
+    public InputField zRotation;
 
     public SurfaceGenerator surface;
 
@@ -51,10 +54,18 @@ public class GUIControls : MonoBehaviour {
         surface.Refresh();
     }
 
-    public void updateFields() {
+    public void updateOffsetFields() {
         Vector3 currentOffset = new Vector3(int.Parse(xOffset.text), int.Parse(yOffset.text), int.Parse(zOffset.text));
         if (currentOffset != surface.noiseOffset) {
             surface.noiseOffset = currentOffset;
+        }
+        surface.Refresh();
+    }
+
+    public void updateRotationFields() {
+        Vector3 currentRotation = new Vector3(int.Parse(xRotation.text), int.Parse(yRotation.text), int.Parse(zRotation.text));
+        if (currentRotation != surface.rotation) {
+            surface.rotation = currentRotation;
         }
         surface.Refresh();
     }
