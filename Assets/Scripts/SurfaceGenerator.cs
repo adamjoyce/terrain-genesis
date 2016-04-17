@@ -3,7 +3,7 @@
 [RequireComponent(typeof(MeshFilter), typeof(MeshRenderer), typeof(MeshCollider))]
 public class SurfaceGenerator : MonoBehaviour {
 
-    [Range(1, 200)] public int resolution = 10;
+    [Range(1, 200)] public int resolution = 100;
 
     // Noise variables.
     public float frequency = 1f;
@@ -141,5 +141,9 @@ public class SurfaceGenerator : MonoBehaviour {
                 Gizmos.DrawRay(vertices[i], scale * normals[i]);
             }
         }
+    }
+
+    private void SetResolution(float res) {
+        resolution = (int)res;
     }
 }
