@@ -79,4 +79,8 @@ public class GUIControls : MonoBehaviour {
             surface.displayNormals = showNormals.isOn;
         surface.Refresh();
     }
+
+    public void toggleWireframe() {
+        Camera.main.GetComponent<CameraControls>().toggleWireframe();
+    }
 }

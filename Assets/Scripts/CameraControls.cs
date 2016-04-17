@@ -19,14 +19,14 @@ public class CameraControls : MonoBehaviour {
             transform.LookAt(terrain);
             transform.RotateAround(terrain.position, Vector3.up, Input.GetAxis("Mouse X") * speed * Time.deltaTime);
         }
-
-        if (Input.GetButtonDown("Switch")) {
-            wireframeActive = !wireframeActive;
-            if (wireframeActive) {
-                wireframe.enabled = true;
-            } else {
-                wireframe.enabled = false;
-            }
-        }
 	}
+
+    public void toggleWireframe() {
+        wireframeActive = !wireframeActive;
+        if (wireframeActive) {
+            wireframe.enabled = true;
+        } else {
+            wireframe.enabled = false;
+        }
+    }
 }

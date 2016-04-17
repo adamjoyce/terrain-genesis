@@ -76,6 +76,10 @@ public class SurfaceGenerator : MonoBehaviour {
         mesh.RecalculateNormals();
         normals = mesh.normals;
         meshCollider.sharedMesh = mesh;
+
+        if (displayNormals) {
+            DrawNormals();
+        }
     }
 
     // Creates a mesh grid where the size is dependent on the resolution.
@@ -133,13 +137,20 @@ public class SurfaceGenerator : MonoBehaviour {
     }
 
     // Draws the normals of the mesh when it is selected.
-    private void OnDrawGizmosSelected() {
+    //private void OnDrawGizmos() {
+    //    float scale = 1f / resolution;
+    //    Gizmos.color = Color.cyan;
+    //    if (displayNormals && vertices != null) {
+    //        for (int i = 0; i < vertices.Length; i++) {
+    //            Gizmos.DrawRay(vertices[i], scale * normals[i]);
+    //        }
+    //    }
+    //}
+
+    private void DrawNormals() {
         float scale = 1f / resolution;
-        Gizmos.color = Color.cyan;
-        if (displayNormals && vertices != null) {
-            for (int i = 0; i < vertices.Length; i++) {
-                Gizmos.DrawRay(vertices[i], scale * normals[i]);
-            }
+        for (int i = 0; i < vertices.Length; i++) {
+            Debug.DrawRay(vertices[i], scale * normals[i], Color.cyan, 100f);
         }
     }
 
