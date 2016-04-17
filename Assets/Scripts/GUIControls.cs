@@ -11,36 +11,51 @@ public class GUIControls : MonoBehaviour {
     public Slider persistence;
     public Slider dimensions;
     public Slider scale;
+
     public Dropdown noiseType;
-    public GameObject surface;
 
-	public void updateValues() {
-        SurfaceGenerator script = surface.GetComponent<SurfaceGenerator>();
+    public InputField xOffset;
+    public InputField yOffset;
+    public InputField zOffset;
 
-        // Sliders.
-        if (script.resolution != resolution.value) {
-            script.resolution = (int)resolution.value;
+    public SurfaceGenerator surface;
+
+    public void updateSliders() {
+        if (surface.resolution != resolution.value) {
+            surface.resolution = (int)resolution.value;
         }
-        if (script.frequency != frequency.value)
-            script.frequency = frequency.value;
-        if (script.octaves != octaves.value)
-            script.octaves = (int)octaves.value;
-        if (script.lacunarity != lacunarity.value)
-            script.lacunarity = lacunarity.value;
-        if (script.persistence != persistence.value)
-            script.persistence = persistence.value;
-        if (script.dimensions != dimensions.value)
-            script.dimensions = (int)dimensions.value;
-        if (script.scaleFactor != scale.value)
-            script.scaleFactor = scale.value;
-        
-        // Dropdown menus.
-        if (script.type != (NoiseMethodType)noiseType.value) {
-            script.type = (NoiseMethodType)noiseType.value;
+        if (surface.frequency != frequency.value) {
+            surface.frequency = frequency.value;
         }
+        if (surface.octaves != octaves.value) {
+            surface.octaves = (int)octaves.value;
+        }
+        if (surface.lacunarity != lacunarity.value) {
+            surface.lacunarity = lacunarity.value;
+        }
+        if (surface.persistence != persistence.value) {
+            surface.persistence = persistence.value;
+        }
+        if (surface.dimensions != dimensions.value) {
+            surface.dimensions = (int)dimensions.value;
+        }
+        if (surface.scaleFactor != scale.value) {
+            surface.scaleFactor = scale.value;
+        }
+        surface.Refresh();
+    }
 
+    public void updateDropdowns() {
+        if (surface.type != (NoiseMethodType)noiseType.value)
+            surface.type = (NoiseMethodType)noiseType.value;
+        surface.Refresh();
+    }
 
-
-        script.Refresh();
+    public void updateFields() {
+        Vector3 currentOffset = new Vector3(int.Parse(xOffset.text), int.Parse(yOffset.text), int.Parse(zOffset.text));
+        if (currentOffset != surface.noiseOffset) {
+            surface.noiseOffset = currentOffset;
+        }
+        surface.Refresh();
     }
 }
