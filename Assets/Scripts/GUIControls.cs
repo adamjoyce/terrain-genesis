@@ -21,6 +21,11 @@ public class GUIControls : MonoBehaviour {
     public InputField yRotation;
     public InputField zRotation;
 
+    public Toggle damping;
+    public Toggle scaleWithColour;
+    public Toggle showNormals;
+    public Toggle showWireframe;
+
     public SurfaceGenerator surface;
 
     public void updateSliders() {
@@ -62,6 +67,16 @@ public class GUIControls : MonoBehaviour {
     public void updateRotationFields() {
         Vector3 currentRotation = new Vector3(int.Parse(xRotation.text), int.Parse(yRotation.text), int.Parse(zRotation.text));
         surface.rotation = currentRotation;
+        surface.Refresh();
+    }
+
+    public void updateToggles() {
+        if (surface.damping != damping.isOn)
+            surface.damping = damping.isOn;
+        if (surface.scaleWithColour != scaleWithColour.isOn)
+            surface.scaleWithColour = scaleWithColour.isOn;
+        if (surface.displayNormals != showNormals.isOn)
+            surface.displayNormals = showNormals.isOn;
         surface.Refresh();
     }
 }
