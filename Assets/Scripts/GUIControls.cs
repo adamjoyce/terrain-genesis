@@ -11,13 +11,16 @@ public class GUIControls : MonoBehaviour {
     public Slider persistence;
     public Slider dimensions;
     public Slider scale;
+    public Dropdown noiseType;
     public GameObject surface;
 
 	public void updateValues() {
         SurfaceGenerator script = surface.GetComponent<SurfaceGenerator>();
-        
-        if (script.resolution != resolution.value)
+
+        // Sliders.
+        if (script.resolution != resolution.value) {
             script.resolution = (int)resolution.value;
+        }
         if (script.frequency != frequency.value)
             script.frequency = frequency.value;
         if (script.octaves != octaves.value)
@@ -30,6 +33,13 @@ public class GUIControls : MonoBehaviour {
             script.dimensions = (int)dimensions.value;
         if (script.scaleFactor != scale.value)
             script.scaleFactor = scale.value;
+        
+        // Dropdown menus.
+        if (script.type != (NoiseMethodType)noiseType.value) {
+            script.type = (NoiseMethodType)noiseType.value;
+        }
+
+
 
         script.Refresh();
     }

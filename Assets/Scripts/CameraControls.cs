@@ -9,6 +9,10 @@ public class CameraControls : MonoBehaviour {
     private float speed = 1000f;
     private bool wireframeActive = false;
 
+    void Start() {
+        gameObject.transform.LookAt(terrain);
+    }
+
 	// Update is called once per frame
 	void Update () {
 	    if (Input.GetMouseButton(1)) {
