@@ -49,24 +49,19 @@ public class GUIControls : MonoBehaviour {
     }
 
     public void updateDropdowns() {
-        if (surface.type != (NoiseMethodType)noiseType.value)
-            surface.type = (NoiseMethodType)noiseType.value;
+        surface.type = (NoiseMethodType)noiseType.value;
         surface.Refresh();
     }
 
     public void updateOffsetFields() {
         Vector3 currentOffset = new Vector3(int.Parse(xOffset.text), int.Parse(yOffset.text), int.Parse(zOffset.text));
-        if (currentOffset != surface.noiseOffset) {
-            surface.noiseOffset = currentOffset;
-        }
+        surface.noiseOffset = currentOffset;
         surface.Refresh();
     }
 
     public void updateRotationFields() {
         Vector3 currentRotation = new Vector3(int.Parse(xRotation.text), int.Parse(yRotation.text), int.Parse(zRotation.text));
-        if (currentRotation != surface.rotation) {
-            surface.rotation = currentRotation;
-        }
+        surface.rotation = currentRotation;
         surface.Refresh();
     }
 }
