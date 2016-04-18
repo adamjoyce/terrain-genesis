@@ -222,11 +222,11 @@ public static class Noise {
         float g0 = gradients1D[hash[i0] & gradientsMask1D];
         float g1 = gradients1D[hash[i1] & gradientsMask1D];
 
-        // Calculate noise contributions from left and right.
+        // Calculate the contributions from left and right.
         float v0 = g0 * t0;
         float v1 = g1 * t1;
 
-        // Compute smooth curve value and interpolate contributions.
+        // Smooth value and interpolation contributions.
         float t = Smooth(t0);
         return Mathf.Lerp(v0, v1, t) * 2f;
     }
@@ -343,7 +343,7 @@ public static class Noise {
             tz);
     }
 
-    // Adds the octaves of noise together.
+    // Fractal noise - adds samples of different frequencies together.
     public static float Sum(NoiseMethod method, Vector3 point, float frequency, int octaves, float lacunarity, float persistence) {
         float sum = method(point, frequency);
         float amplitude = 1f;

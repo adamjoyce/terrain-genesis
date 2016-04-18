@@ -12,6 +12,14 @@ public class GUIControls : MonoBehaviour {
     public Slider dimensions;
     public Slider scale;
 
+    public Text resolutionValue;
+    public Text frequencyValue;
+    public Text octaveValue;
+    public Text lacunarityValue;
+    public Text persistenceValue;
+    public Text dimensionValue;
+    public Text scaleValue;
+
     public Dropdown noiseType;
 
     public InputField xOffset;
@@ -32,24 +40,31 @@ public class GUIControls : MonoBehaviour {
     public void updateSliders() {
         if (surface.resolution != resolution.value) {
             surface.resolution = (int)resolution.value;
+            resolutionValue.text = "" + resolution.value;
         }
         if (surface.frequency != frequency.value) {
             surface.frequency = frequency.value;
+            frequencyValue.text = "" + frequency.value;
         }
         if (surface.octaves != octaves.value) {
             surface.octaves = (int)octaves.value;
+            octaveValue.text = "" + octaves.value;
         }
         if (surface.lacunarity != lacunarity.value) {
             surface.lacunarity = lacunarity.value;
+            lacunarityValue.text = "" + lacunarity.value;
         }
         if (surface.persistence != persistence.value) {
             surface.persistence = persistence.value;
+            persistenceValue.text = "" + persistence.value;
         }
         if (surface.dimensions != dimensions.value) {
             surface.dimensions = (int)dimensions.value;
+            dimensionValue.text = "" + dimensions.value;
         }
         if (surface.scaleFactor != scale.value) {
             surface.scaleFactor = scale.value;
+            scaleValue.text = "" + scale.value;
         }
         surface.Refresh();
     }

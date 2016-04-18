@@ -84,10 +84,9 @@ public class SurfaceGenerator : MonoBehaviour {
         normals = mesh.normals;
         meshCollider.sharedMesh = mesh;
 
-        // DEAL WITH THIS.
-        if (displayNormals) {
-            DrawNormals();
-        }
+        //if (displayNormals) {
+        //    DrawNormals();
+        //}
     }
 
     // Creates a mesh grid where the size is dependent on the resolution.
@@ -144,22 +143,22 @@ public class SurfaceGenerator : MonoBehaviour {
         Refresh();
     }
 
-    // Draws the normals of the mesh when it is selected.
-    //private void OnDrawGizmos() {
-    //    float scale = 1f / resolution;
-    //    Gizmos.color = Color.cyan;
-    //    if (displayNormals && vertices != null) {
-    //        for (int i = 0; i < vertices.Length; i++) {
-    //            Gizmos.DrawRay(vertices[i], scale * normals[i]);
-    //        }
-    //    }
-    //}
-
-    // Draws a ray for each quad signifing its normal.
-    private void DrawNormals() {
+    //Draws the normals of the mesh when it is selected.
+    private void OnDrawGizmos() {
         float scale = 1f / resolution;
-        for (int i = 0; i < vertices.Length; i++) {
-            Debug.DrawRay(vertices[i], scale * normals[i], Color.cyan, 100f);
+        Gizmos.color = Color.cyan;
+        if (displayNormals && vertices != null) {
+            for (int i = 0; i < vertices.Length; i++) {
+                Gizmos.DrawRay(vertices[i], scale * normals[i]);
+            }
         }
     }
+
+    //// Draws a ray for each quad signifing its normal.
+    //private void DrawNormals() {
+    //    float scale = 1f / resolution;
+    //    for (int i = 0; i < vertices.Length; i++) {
+    //        Debug.DrawRay(vertices[i], scale * normals[i], Color.cyan, 100f);
+    //    }
+    //}
 }
