@@ -36,7 +36,7 @@ public class SurfaceGenerator : MonoBehaviour {
 
         Quaternion rotate = Quaternion.Euler(rotation);
 
-        // Four quad transformed from local space to world space with rotation accounted for.
+        // Four quad corners transformed from local space to world space with rotation accounted for.
         Vector3 point00 = rotate * transform.TransformPoint(new Vector3(-0.5f, -0.5f)) + noiseOffset;
         Vector3 point10 = rotate * transform.TransformPoint(new Vector3(0.5f, -0.5f)) + noiseOffset;
         Vector3 point01 = rotate * transform.TransformPoint(new Vector3(-0.5f, 0.5f)) + noiseOffset;
