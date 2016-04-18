@@ -9,11 +9,12 @@ public class CameraControls : MonoBehaviour {
     private float speed = 1000f;
     private bool wireframeActive = false;
 
+    // Use this for initilisation.
     void Start() {
         gameObject.transform.LookAt(terrain);
     }
 
-	// Update is called once per frame
+	// Update is called once per frame.
 	void Update () {
 	    if (Input.GetMouseButton(1)) {
             transform.LookAt(terrain);
@@ -21,6 +22,7 @@ public class CameraControls : MonoBehaviour {
         }
 	}
 
+    // Toggles the wireframe camera for viewing the scene in wireframe mode.
     public void toggleWireframe() {
         wireframeActive = !wireframeActive;
         if (wireframeActive) {

@@ -36,7 +36,7 @@ public class SurfaceGenerator : MonoBehaviour {
 
         Quaternion rotate = Quaternion.Euler(rotation);
 
-        // Quad corners. MORE COMPREHENSIVE.
+        // Four quad transformed from local space to world space with rotation accounted for.
         Vector3 point00 = rotate * transform.TransformPoint(new Vector3(-0.5f, -0.5f)) + noiseOffset;
         Vector3 point10 = rotate * transform.TransformPoint(new Vector3(0.5f, -0.5f)) + noiseOffset;
         Vector3 point01 = rotate * transform.TransformPoint(new Vector3(-0.5f, 0.5f)) + noiseOffset;
@@ -46,6 +46,7 @@ public class SurfaceGenerator : MonoBehaviour {
         NoiseMethod method = Noise.methods[(int)type][dimensions - 1];
         float quadSize = 1f / currentResolution;
 
+        // Take into account frequency damping.
         float amplitude;
         if (damping) {
             amplitude = scaleFactor / frequency;
@@ -54,13 +55,17 @@ public class SurfaceGenerator : MonoBehaviour {
         }
 
         for (int i = 0, y = 0; y <= resolution; y++) {
+            // Linearly interpolate between the bottom left and top left corner and the bottom right and top right corner.
             Vector3 point0 = Vector3.Lerp(point00, point01, y * quadSize);
             Vector3 point1 = Vector3.Lerp(point10, point11, y * quadSize);
 
+            // Loop through each quad taking an appropriate noise sample.
             for (int x = 0; x <= resolution; x++, i++) {
                 Vector3 point = Vector3.Lerp(point0, point1, x * quadSize);
                 float noiseSample = Noise.Sum(method, point, frequency, octaves, lacunarity, persistence);
                 noiseSample = type == NoiseMethodType.Value ? (noiseSample - 0.5f) : (noiseSample * 0.5f);
+
+                // Determine if colour should be retained when scaled.
                 if (scaleWithColour) {
                     colours[i] = coloring.Evaluate(noiseSample + 0.5f);
                     noiseSample *= amplitude;
@@ -71,12 +76,15 @@ public class SurfaceGenerator : MonoBehaviour {
                 vertices[i].y = noiseSample;
             }
         }
+
+        // Update mesh values.
         mesh.vertices = vertices;
         mesh.colors = colours;
         mesh.RecalculateNormals();
         normals = mesh.normals;
         meshCollider.sharedMesh = mesh;
 
+        // DEAL WITH THIS.
         if (displayNormals) {
             DrawNormals();
         }
@@ -96,7 +104,7 @@ public class SurfaceGenerator : MonoBehaviour {
 
         Vector2[] uvs = new Vector2[vertices.Length];
 
-        // Build the mesh grid vertex array.
+        // Build the mesh grid vertex arrays.
         for (int i = 0, z = 0; z <= currentResolution; z++) {
             for (int x = 0; x <= currentResolution; x++, i++) {
                 vertices[i] = new Vector3(x * quadSize - 0.5f, 0f, z * quadSize - 0.5f);
@@ -147,14 +155,11 @@ public class SurfaceGenerator : MonoBehaviour {
     //    }
     //}
 
+    // Draws a ray for each quad signifing its normal.
     private void DrawNormals() {
         float scale = 1f / resolution;
         for (int i = 0; i < vertices.Length; i++) {
             Debug.DrawRay(vertices[i], scale * normals[i], Color.cyan, 100f);
         }
-    }
-
-    private void SetResolution(float res) {
-        resolution = (int)res;
     }
 }

@@ -28,6 +28,7 @@ public class GUIControls : MonoBehaviour {
 
     public SurfaceGenerator surface;
 
+    // Checks which GUI slider has been changed and updates the value for the surface mesh.
     public void updateSliders() {
         if (surface.resolution != resolution.value) {
             surface.resolution = (int)resolution.value;
@@ -53,23 +54,27 @@ public class GUIControls : MonoBehaviour {
         surface.Refresh();
     }
 
+    // Updates the noise type for the surface mesh when they are changed in the GUI.
     public void updateDropdowns() {
         surface.type = (NoiseMethodType)noiseType.value;
         surface.Refresh();
     }
 
+    // Updates the noise offset values for the surface mesh when they are changed in the GUI.
     public void updateOffsetFields() {
         Vector3 currentOffset = new Vector3(int.Parse(xOffset.text), int.Parse(yOffset.text), int.Parse(zOffset.text));
         surface.noiseOffset = currentOffset;
         surface.Refresh();
     }
 
+    // Updates the noise rotation values for the surface mesh when they are changed in the GUI.
     public void updateRotationFields() {
         Vector3 currentRotation = new Vector3(int.Parse(xRotation.text), int.Parse(yRotation.text), int.Parse(zRotation.text));
         surface.rotation = currentRotation;
         surface.Refresh();
     }
 
+    // Checks which GUI toggle has been changed and updates the value for the surface mesh.
     public void updateToggles() {
         if (surface.damping != damping.isOn)
             surface.damping = damping.isOn;
@@ -80,6 +85,7 @@ public class GUIControls : MonoBehaviour {
         surface.Refresh();
     }
 
+    // Toggles the wireframe camera when the GUI option is selected.
     public void toggleWireframe() {
         Camera.main.GetComponent<CameraControls>().toggleWireframe();
     }
